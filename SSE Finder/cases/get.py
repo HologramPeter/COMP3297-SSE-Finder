@@ -14,9 +14,10 @@ import requests, json
 VERSION = "v1.0.0"
 
 def retrive_Data(location):
-    address = address.replace(" ", "%20")
-    response = requests.get("https://geodata.gov.hk/gs/api/" + version + "/locationSearch?q=" + address)
+    location = location.replace(" ", "%20")
+    response = requests.get("https://geodata.gov.hk/gs/api/" + VERSION + "/locationSearch?q=" + location)
     if(response.status_code == 200):
+        response = (response.json())[0]
         return(response['addressEN'], response['x'], response['y'])
     else:
         return tuple()
