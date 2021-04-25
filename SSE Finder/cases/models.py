@@ -1,5 +1,5 @@
 from django.db import models
-from get import retrive_Data
+from demo_app.get import retrive_Data
 
 # Create your models here.
 class Infector(models.Model):
