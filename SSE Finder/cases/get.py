@@ -9,7 +9,7 @@
 # print("\nResponse status: %d\n"%response.status_code)
 # pprint.pprint(response.json())
 
-import requests. json
+import requests, json
 
 VERSION = "v1.0.0"
 
