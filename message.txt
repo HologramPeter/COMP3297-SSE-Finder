@@ -1,2 +1,5 @@
 comp3297isbad: Updated the model
 comp3297isbad: not yet the do marigation 
+
+comp3297isbad: both form of event and case use the same css file
+comp3297isbad: the presentation of x_cord y_cord and address needed to be defined
