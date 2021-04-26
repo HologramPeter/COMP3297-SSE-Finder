@@ -24,7 +24,6 @@ class Event(models.Model):
     venue_x_coord = models.IntegerField() # generate by function
     venue_y_coord = models.IntegerField() # generate by function 
     date_of_event = models.DateField()
-    date_of_confirmation = models.DateField()
     description = models.CharField(max_length=3000)
 
     def save(self, *args, **kwargs):
