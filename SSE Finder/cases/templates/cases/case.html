@@ -12,35 +12,37 @@
         <div class="title">
             <p>Case Submission Form</p>
         </div>
-        <div class="form">
-            <div class="inputfield">
-                <label for="case_number"><span>Case Number:</span></label>
-                <input type="text" class="input" name="case_number">
+        <form action="caseform" method="POST"> {% csrf_token %}
+            <div class="form">
+                <div class="inputfield">
+                    <label for="case_number"><span>Case Number:</span></label>
+                    <input type="text" class="input" id="case_number" name="case_number">
+                </div>
+                <div class="inputfield">
+                    <label for="person_name"><span>Person Name:</span></label>
+                    <input type="text" class="input" id="person_name" name="person_name">
+                </div>
+                <div class="inputfield">
+                    <label for="document_number"><span>Document Number</span></label>
+                    <input type="text" class="input" id="document_number" name="document_number">
+                </div>
+                <div class="inputfield">
+                    <label for="date_of_birth"><span>Date of Birth:</span></label>
+                    <input type="date" class="input" id="date_of_birth" name="date_of_birth">
+                </div>
+                <div class="inputfield">
+                    <label for="date_of_onset"><span>Date of Onset:</span></label>
+                    <input type="date" class="input" id="date_of_onset" name="date_of_onset">
+                </div>
+                <div class="inputfield">
+                    <label for="date_of_confirmation"><span>Date of Confirmation:</span></label>
+                    <input type="date" class="input" id="date_of_confirmation" name="date_of_confirmation">
+                </div>
+                <div class="inputfield">
+                    <input type="submit" value="Submit" class="btn">
+                </div>
             </div>
-            <div class="inputfield">
-                <label for="person_name"><span>Person Name:</span></label>
-                <input type="text" class="input" name="person_name">
-            </div>
-            <div class="inputfield">
-                <label for="document_number"><span>Document Number</span></label>
-                <input type="text" class="input" name="document_number">
-            </div>
-            <div class="inputfield">
-                <label for="date_of_birth"><span>Date of Birth:</span></label>
-                <input type="date" class="input" name="date_of_birth">
-            </div>
-            <div class="inputfield">
-                <label for="date_of_onset"><span>Date of Onset:</span></label>
-                <input type="date" class="input" name="date_of_onset">
-            </div>
-            <div class="inputfield">
-                <label for="date_of_confirmation"><span>Date of Confirmation:</span></label>
-                <input type="date" class="input" name="date_of_confirmation">
-            </div>
-            <div class="inputfield">
-                <input type="submit" value="Submit" class="btn">
-            </div>
-        </div>
+        </form>
     </div>
 </body>
 </html>
