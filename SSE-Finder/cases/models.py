@@ -1,5 +1,5 @@
 from django.db import models
-from demo_app.get import retrive_Data
+from cases.get import retrive_Data
 
 # Create your models here.
 class Infector(models.Model):
@@ -14,9 +14,9 @@ class Event(models.Model):
     infector = models.ForeignKey(Infector, on_delete=models.CASCADE)
     venue_name = models.CharField(max_length=100)
     venue_location = models.CharField(max_length=1000)
-    venue_address = models.CharField(max_length=1000, blank=True, null=True) # generate by function 
+    venue_address = models.CharField(max_length=1000, blank=True, null=True) # generate by function
     venue_x_coord = models.IntegerField(blank=True, null=True) # generate by function
-    venue_y_coord = models.IntegerField(blank=True, null=True) # generate by function 
+    venue_y_coord = models.IntegerField(blank=True, null=True) # generate by function
     date_of_event = models.DateField()
     description = models.CharField(max_length=3000)
 

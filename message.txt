@@ -7,3 +7,6 @@ comp3297isbad: created the view of the case form
 comp3297isbad: finish the directing of all the forms
 
 comp3297isbad: comfirm.html need to add back a redirect <a href></a> for exit
+
+kittietlam: cleans up the github repo
+kittietlam: renamed 'website' -> 'config' and 'demo_app' -> 'cases' for clarity

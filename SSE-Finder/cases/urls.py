@@ -1,5 +1,5 @@
 from django.urls import path
-from demo_app import views
+from cases import views
 
 urlpatterns = [
     path("", views.index_detail, name="index"),
@@ -7,4 +7,3 @@ urlpatterns = [
     path('event/<int:case_number>', views.event_detail, name="event"),
     path('confirm', views.confirm_detail, name="confirm")
 ]
-
