@@ -15,6 +15,10 @@ def event_detail(request, case_number):
         venue_location = request.POST.get('venue_location')
         date_of_event = request.POST.get('date_of_event')
         description = request.POST.get('description')
+        # check if date is during period of interest
+        # first check if matching venue_name + venue_location + date_of_event exists
+        # if no: create a record
+        # Attendance.objects.create(infector=infector, event_attended=doge, desscription=desription)
         data = retrive_Data(venue_location)
         if (len(data) == 0):
             #fail to retrive the data for x and y and using sesstion to pass the rest of data
@@ -27,6 +31,7 @@ def event_detail(request, case_number):
         else:
             #save the data as retrive success
             infector = Infector.objects.get(case_number=case_number)
+            # add error checking code for the case that case_number doesn't exist
             temp = Event.objects.create(infector=infector, venue_name=venue_name, venue_location=venue_location, date_of_event=date_of_event, description=description)
             return render(request, 'cases/ok.html')
 
