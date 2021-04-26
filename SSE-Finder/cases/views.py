@@ -119,5 +119,19 @@ def case_detail(request):
         date_of_birth = request.POST.get('date_of_birth')
         date_of_onset = request.POST.get('date_of_onset')
         date_of_confirmation = request.POST.get('date_of_confirmation')
-        temp = Infector.objects.create(case_number=case_number, person_name=person_name, document_number=document_number, date_of_birth=date_of_birth, date_of_onset=date_of_onset, date_of_confirmation= date_of_confirmation)
-        return render(request, 'cases/case.html')
+
+        # check for duplicate
+        if (Infector.objects.filter(case_number=case_number).exists()):
+            context = {'msg':'Record with case number ' + case_number + ' already exists!'}
+            return render(request, 'cases/ok.html', context)
+
+        Infector.objects.create(case_number=case_number, person_name=person_name, document_number=document_number, date_of_birth=date_of_birth, date_of_onset=date_of_onset, date_of_confirmation= date_of_confirmation)
+        context = {'msg': 'Record added successfully'}
+        return render(request, 'cases/ok.html', context)
+
+# for showing list of all SSE's
+def show_sse(request):
+    if request.method == 'GET':
+        return render(request, 'cases/sse/html')
+    if request.method == 'POST':
+        return render(request, 'cases/sse.html')
