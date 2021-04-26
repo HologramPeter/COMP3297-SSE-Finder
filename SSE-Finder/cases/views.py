@@ -6,7 +6,7 @@ from cases.get import retrive_Data
 # PETER FINISH THESE 3 FUNCTIONS (can move them to other files)
 def check_SSE(event):
     # if more than 6 attendance are mapped to this event and have infected=true, set SSE to true, else false
-    return False
+    return True
 
 def check_infected(infector, event):
     return False
@@ -78,6 +78,8 @@ def event_detail(request, case_number):
 
         event = create_event(venue_name, venue_location, date_of_event, data)
         context = {'msg': create_attendance(infector, event, description)}
+        event.is_SSE = check_SSE(event) # PETER FINISH THIS
+        event.save()
         return render(request, 'cases/ok.html', context)
 
 # view for when coordinate retrieval fails
@@ -98,6 +100,10 @@ def confirm_detail(request):
         infector = Infector.objects.get(case_number=case_number)
         event = create_event(venue_name, venue_location, date_of_event, [])
         context = {'msg': create_attendance(infector, event, description)}
+
+        # update SSE's
+        event.is_SSE = check_SSE(event) # PETER FINISH THIS
+        event.save()
         return render(request, 'cases/ok.html', context)
 
 # view for adding new case

@@ -13,7 +13,6 @@ class Infector(models.Model):
         return str(self.person_name)
 
 class Event(models.Model):
-    # infector = models.ForeignKey(Infector, on_delete=models.CASCADE)
     venue_name = models.CharField(max_length=100)
     venue_location = models.CharField(max_length=1000)
     venue_address = models.CharField(max_length=1000, blank=True, null=True) # generate by function
@@ -21,17 +20,9 @@ class Event(models.Model):
     venue_y_coord = models.IntegerField(blank=True, null=True) # generate by function
     date_of_event = models.DateField()
     is_SSE = models.BooleanField(default=False)
-    # description = models.CharField(max_length=3000)
 
-    def save(self, *args, **kwargs):
-        print(self.venue_location)
-        data = retrive_Data(self.venue_location)
-        if (len(data) != 0):
-            self.venue_address = data[0]
-            self.venue_x_coord = data[1]
-            self.venue_y_coord = data[2]
-        super().save(*args, **kwargs)
-
+    def __str__(self):
+        return (self.venue_name + ', ' + self.venue_location)
 
 class Attendance(models.Model):
     infector = models.ForeignKey(Infector, on_delete=models.CASCADE)
@@ -39,3 +30,6 @@ class Attendance(models.Model):
     description = models.CharField(max_length=3000)
     is_infector = models.BooleanField() # generate by function
     is_infected = models.BooleanField() # generate by function
+
+    def __str__(self):
+        return self.description
