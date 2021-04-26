@@ -7,9 +7,9 @@
     <title>Confirmation</title>
 </head>
 <body>
-    <h1>Address cannot retrieve! Are you sure to continue to store the data?</h1>
+    <h1>Address and/or coordinates could not be retrieved. Add record anyway?</h1>
     <form action="" method="POST"> {% csrf_token %}
-        <button type="submit" value="Continue" formmethod="POST"></button>
+        <button type="submit" value="Continue" formmethod="POST">Yes</button>
     </form>
 </body>
 </html>
