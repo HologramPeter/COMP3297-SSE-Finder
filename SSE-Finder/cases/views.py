@@ -26,10 +26,11 @@ def check_infector(infector, event):
     event_date = dt.datetime.strptime(event.date_of_event,"%Y-%m-%d").date() if (isinstance(event.date_of_event,str)) else event.date_of_event
     date_of_onset = infector.date_of_onset
 
-    easliest_date_of_infecting = date_of_onset-dt.timedelta(days=3) # minus an extra day
+    easliest_date_of_infecting = date_of_onset-dt.timedelta(days=3)
 
     is_infector = (event_date >= easliest_date_of_infecting)
 
+    print(event_date, date_of_onset, easliest_date_of_infecting)
     print(is_infector)
     return is_infector
 
@@ -60,7 +61,7 @@ def create_attendance(infector, event_attended, description):
     return 'Attendance record added successfully.'
 
 # ----- create views here ------ #
-# homepage?
+# homepage
 def index_detail(request):
     return render(request, 'cases/home.html')
 
@@ -131,7 +132,7 @@ def confirm_detail(request):
         context = {'msg': create_attendance(infector, event, description)}
 
         # update SSE's
-        event.is_SSE = check_SSE(event) # PETER FINISH THIS
+        event.is_SSE = check_SSE(event)
         event.save()
         return render(request, 'cases/ok.html', context)
 
@@ -140,8 +141,6 @@ def case_detail(request):
     if request.method == 'GET':
         return render(request, 'cases/case.html')
     elif request.method == 'POST':
-        # TODO: prevent submission if date_of_confirmation is earlier than date_of_onset
-        # TODO: add some html form validation
         case_number = request.POST.get('case_number')
         person_name = request.POST.get('person_name')
         document_number = request.POST.get('document_number')
