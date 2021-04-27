@@ -24,6 +24,3 @@ def retrive_Data(location):
         return(address, x, y)
     else:
         return tuple()
-
-
-
