@@ -70,7 +70,14 @@ def index_detail(request):
 # view for adding attendance records
 def event_detail(request, case_number):
     if request.method == 'GET':
-        return render(request, 'cases/event.html')
+        infector = Infector.objects.get(case_number=case_number)
+        date_of_onset = infector.date_of_onset
+        date_of_confirmation = infector.date_of_confirmation
+        ctx = {
+            'date_of_onset': date_of_onset,
+            'date_of_confirmation': date_of_confirmation
+        }
+        return render(request, 'cases/event.html', ctx)
 
     if request.method == 'POST':
         venue_name = request.POST.get('venue_name')

@@ -45,15 +45,15 @@
         </form>
         <a href="/">Back</a>
     </div>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script type="text/javascript">
-    var date_of_onset;
-    $('#date_of_onset').on('change',function(){
-        date_of_onset = $(this).val()
-        $('#date_of_confirmation').prop('min',function(){
-            return date_of_onset
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        var date_of_onset;
+        $('#date_of_onset').on('change',function(){
+            date_of_onset = $(this).val()
+            $('#date_of_confirmation').prop('min',function(){
+                return date_of_onset
+            });
         });
-    });
-</script>    
+    </script>    
 </body>
 </html>
