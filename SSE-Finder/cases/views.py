@@ -2,17 +2,38 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from cases.models import Infector, Event, Attendance
 from cases.get import retrive_Data
+import datetime as dt
 
 # PETER FINISH THESE 3 FUNCTIONS (can move them to other files)
 def check_SSE(event):
     # if more than 6 attendance are mapped to this event and have infected=true, set SSE to true, else false
-    return True
+    # REMARKS: "An SSE is an event which results in more than 6 new infections." So I ignore "infected=true".
+    
+    attendance = Attendance.objects.filter(event_attended=event)
+    return len(attendance)>6
 
 def check_infected(infector, event):
-    return False
+    event_date = event.date_of_event
+    date_of_onset = infector.date_of_onset
+
+    easliest_date_of_getting_infected = date_of_onset-dt.timedelta(days=14)
+    latest_date_of_getting_infected = date_of_onset-dt.timedelta(days=2)
+
+    is_infected = event_date >= easliest_date_of_getting_infected and event_date <= latest_date_of_getting_infected
+    
+    print(is_infected)
+    return is_infected
 
 def check_infector(infector, event):
-    return False
+    event_date = event.date_of_event
+    date_of_onset = infector.date_of_onset
+
+    easliest_date_of_infecting = date_of_onset-dt.timedelta(days=3)
+
+    is_infector = event_date >= easliest_date_of_infecting
+    
+    print(is_infector)
+    return is_infector
 
 
 # check if event exists in database already, if not then create a new one and return it
