@@ -11,6 +11,26 @@
     <div class="wrapper">
         <div class="title"><p>Potential SSEs</p></div>
         <p>{{ start_date }} to {{ end_date }}</p>
+        <table>
+          <thead>
+            <th>Venue Name</th>
+            <th>Venue Location</th>
+            <th>Date</th>
+            <th>Address</th>
+            <th>X-Coordinate</th>
+            <th>Y-Coordinate</th>
+          </thead>
+          {% for evt in events %}
+            <tr>
+              <td>{{ evt.venue_name }}</td>
+              <td>{{ evt.venue_location }}</td>
+              <td>{{ evt.date_of_event }}</td>
+              <td>{{ evt.venue_address }}</td>
+              <td>{{ evt.venue_x_coord }}</td>
+              <td>{{ evt.venue_y_coord }}</td>
+            </tr>
+          {% endfor %}
+        </table>
     </div>
 </body>
 </html>

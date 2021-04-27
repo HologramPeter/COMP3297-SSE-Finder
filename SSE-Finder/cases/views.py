@@ -136,6 +136,6 @@ def show_sse(request):
     if request.method == 'POST':
         start_date = request.POST.get('start_date')
         end_date = request.POST.get('end_date')
-        context = {'start_date':start_date, 'end_date':end_date}
-        
+        events = Event.objects.filter(is_SSE=True).order_by('-date_of_event').filter(date_of_event__range=[start_date, end_date])
+        context = {'start_date':start_date, 'end_date':end_date, 'events':events}
         return render(request, 'cases/sse.html', context)
