@@ -39,7 +39,7 @@ body{
     flex-direction: column;
 }
 
-.wrapper .form .inputfield{
+.wrapper .form .inputfield {
     margin: 10px 12px;
     display: flex;
     align-items: center;
@@ -86,7 +86,7 @@ body{
     border: 1px solid F95700FF;
 }
 
-.wrapper .form .inputfield .btn{
+.wrapper .form .inputfield .btn {
     width: 100%;
     margin-top: 10px;
     padding: 12px 10px;
@@ -115,5 +115,3 @@ body{
         margin-bottom: 5px;
     }
 }
-
-

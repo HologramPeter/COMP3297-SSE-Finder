@@ -5,11 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirmation</title>
+    <link rel="stylesheet" href="../static/confirm.css">
 </head>
 <body>
-    <h1>Address and/or coordinates could not be retrieved. Add record anyway?</h1>
-    <form action="" method="POST"> {% csrf_token %}
-        <button type="submit" value="Continue" formmethod="POST">Yes</button>
-    </form>
+    <div class="message">
+        <h1>Address cannot retrieve! Are you sure to continue to store the data?</h1>
+    </div>
+    <div class="control">
+        <form action="" method="POST"> {% csrf_token %}
+            <button class="button" type="submit" value="Continue" formmethod="POST">Continue</button>
+        </form>
+        <a href="#" class="button">Back to list</a>
+    </div>
 </body>
 </html>

@@ -64,7 +64,7 @@ def create_attendance(infector, event_attended, description):
 # ----- create views here ------ #
 # homepage?
 def index_detail(request):
-    return render(request, 'cases/event.html')
+    return render(request, 'cases/home.html')
 
 # view for adding attendance records
 def event_detail(request, case_number):
