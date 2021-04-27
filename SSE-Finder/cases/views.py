@@ -8,28 +8,30 @@ import datetime as dt
 # PETER FINISH THESE 3 FUNCTIONS (can move them to other files)
 def check_SSE(event):
     # if more than 6 attendance are mapped to this event and have infected=true, set SSE to true, else false
-    attendance = Attendance.objects.filter(event_attended=event).filter(infected=true)
+    attendance = Attendance.objects.filter(event_attended=event).filter(is_infected=True) #TODO discuss if this is necessary
     return len(attendance)>6
 
 def check_infected(infector, event):
     event_date = event.date_of_event
     date_of_onset = infector.date_of_onset
 
-    easliest_date_of_getting_infected = date_of_onset-dt.timedelta(days=15) # minus an extra day b/c datetime doesn't support >= operator ??
-    latest_date_of_getting_infected = date_of_onset-dt.timedelta(days=1)
-
-    is_infected = event_date > easliest_date_of_getting_infected and event_date < latest_date_of_getting_infected
+    easliest_date_of_getting_infected = date_of_onset-dt.timedelta(days=14)
+    latest_date_of_getting_infected = date_of_onset-dt.timedelta(days=2)
+     # minus an extra day b/c datetime doesn't support >= operator ??
+     # >= and <= are supported as long as >, < and == are defined
+ 
+    is_infected = (event_date >= easliest_date_of_getting_infected) and (event_date <= latest_date_of_getting_infected)
 
     print(is_infected)
-    return is_inf
+    return is_infected
 
 def check_infector(infector, event):
     event_date = event.date_of_event
     date_of_onset = infector.date_of_onset
 
-    easliest_date_of_infecting = date_of_onset-dt.timedelta(days=4) # minus an extra day
+    easliest_date_of_infecting = date_of_onset-dt.timedelta(days=3) # minus an extra day
 
-    is_infector = event_date > easliest_date_of_infecting
+    is_infector = (event_date >= easliest_date_of_infecting)
 
     print(is_infector)
     return is_infector
