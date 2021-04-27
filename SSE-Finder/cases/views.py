@@ -132,6 +132,10 @@ def case_detail(request):
 # for showing list of all SSE's
 def show_sse(request):
     if request.method == 'GET':
-        return render(request, 'cases/sse/html')
+        return render(request, 'cases/sse_form.html')
     if request.method == 'POST':
-        return render(request, 'cases/sse.html')
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        context = {'start_date':start_date, 'end_date':end_date}
+        
+        return render(request, 'cases/sse.html', context)

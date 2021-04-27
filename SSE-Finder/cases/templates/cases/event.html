@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Form</title>
+    <title>Add Event</title>
     <link rel="stylesheet" href="../static/form.css">
 </head>
 <body>
     <div class="wrapper">
         <div class="title">
-            <p>Event Form</p>
+            <p>Add Event Attendance Record</p>
         </div>
         <form action="" method="POST"> {% csrf_token %}
             <div class="form">
@@ -29,7 +29,7 @@
                 <div class="inputfield">
                     <label for="description"><span>Description:</span></label>
                     <textarea class="textarea" name="description" required></textarea>
-                </div> 
+                </div>
                 <div class="inputfield">
                     <input type="submit" value="Submit" class="btn">
                 </div>
