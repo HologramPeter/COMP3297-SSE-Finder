@@ -5,20 +5,17 @@ from cases.models import Infector, Event, Attendance
 from cases.get import retrive_Data
 import datetime as dt
 
-# PETER FINISH THESE 3 FUNCTIONS (can move them to other files)
 def check_SSE(event):
     # if more than 6 attendance are mapped to this event and have infected=true, set SSE to true, else false
     attendance = Attendance.objects.filter(event_attended=event).filter(is_infected=True) #TODO discuss if this is necessary
     return len(attendance)>6
 
 def check_infected(infector, event):
-    event_date = dt.datetime.strptime(event.date_of_event,"%Y-%m-%d") if (isinstance(event.date_of_event,str)) else event.date_of_event
+    event_date = dt.datetime.strptime(event.date_of_event,"%Y-%m-%d").date() if (isinstance(event.date_of_event,str)) else event.date_of_event
     date_of_onset = infector.date_of_onset
 
     easliest_date_of_getting_infected = date_of_onset-dt.timedelta(days=14)
     latest_date_of_getting_infected = date_of_onset-dt.timedelta(days=2)
-     # minus an extra day b/c datetime doesn't support >= operator ??
-     # >= and <= are supported as long as >, < and == are defined
 
     is_infected = (event_date >= easliest_date_of_getting_infected) and (event_date <= latest_date_of_getting_infected)
 
@@ -26,7 +23,7 @@ def check_infected(infector, event):
     return is_infected
 
 def check_infector(infector, event):
-    event_date = dt.datetime.strptime(event.date_of_event,"%Y-%m-%d") if (isinstance(event.date_of_event,str)) else event.date_of_event
+    event_date = dt.datetime.strptime(event.date_of_event,"%Y-%m-%d").date() if (isinstance(event.date_of_event,str)) else event.date_of_event
     date_of_onset = infector.date_of_onset
 
     easliest_date_of_infecting = date_of_onset-dt.timedelta(days=3) # minus an extra day
@@ -110,7 +107,7 @@ def event_detail(request, case_number):
 
         event = create_event(venue_name, venue_location, date_of_event, data)
         context = {'msg': create_attendance(infector, event, description)}
-        event.is_SSE = check_SSE(event) # PETER FINISH THIS
+        event.is_SSE = check_SSE(event)
         event.save()
         return render(request, 'cases/ok.html', context)
 
