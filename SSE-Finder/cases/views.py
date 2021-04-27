@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from cases.models import Infector, Event, Attendance
@@ -7,31 +8,29 @@ import datetime as dt
 # PETER FINISH THESE 3 FUNCTIONS (can move them to other files)
 def check_SSE(event):
     # if more than 6 attendance are mapped to this event and have infected=true, set SSE to true, else false
-    # REMARKS: "An SSE is an event which results in more than 6 new infections." So I ignore "infected=true".
-    
-    attendance = Attendance.objects.filter(event_attended=event)
+    attendance = Attendance.objects.filter(event_attended=event).filter(infected=true)
     return len(attendance)>6
 
 def check_infected(infector, event):
     event_date = event.date_of_event
     date_of_onset = infector.date_of_onset
 
-    easliest_date_of_getting_infected = date_of_onset-dt.timedelta(days=14)
-    latest_date_of_getting_infected = date_of_onset-dt.timedelta(days=2)
+    easliest_date_of_getting_infected = date_of_onset-dt.timedelta(days=15) # minus an extra day b/c datetime doesn't support >= operator ??
+    latest_date_of_getting_infected = date_of_onset-dt.timedelta(days=1)
 
-    is_infected = event_date >= easliest_date_of_getting_infected and event_date <= latest_date_of_getting_infected
-    
+    is_infected = event_date > easliest_date_of_getting_infected and event_date < latest_date_of_getting_infected
+
     print(is_infected)
-    return is_infected
+    return is_inf
 
 def check_infector(infector, event):
     event_date = event.date_of_event
     date_of_onset = infector.date_of_onset
 
-    easliest_date_of_infecting = date_of_onset-dt.timedelta(days=3)
+    easliest_date_of_infecting = date_of_onset-dt.timedelta(days=4) # minus an extra day
 
-    is_infector = event_date >= easliest_date_of_infecting
-    
+    is_infector = event_date > easliest_date_of_infecting
+
     print(is_infector)
     return is_infector
 
@@ -68,8 +67,20 @@ def index_detail(request):
 
 # view for adding attendance records
 def event_detail(request, case_number):
+    # prevent access if case number doesn't exist
+    if (not Infector.objects.filter(case_number=case_number).exists()):
+        context = {'msg':'Case number not found!'}
+        return render(request, 'cases/ok.html', context)
+
     if request.method == 'GET':
-        return render(request, 'cases/event.html')
+        infector = Infector.objects.get(case_number=case_number)
+        date_of_onset = infector.date_of_onset
+        date_of_confirmation = infector.date_of_confirmation
+        ctx = {
+            'date_of_onset': date_of_onset,
+            'date_of_confirmation': date_of_confirmation
+        }
+        return render(request, 'cases/event.html', ctx)
 
     if request.method == 'POST':
         venue_name = request.POST.get('venue_name')
@@ -77,14 +88,7 @@ def event_detail(request, case_number):
         date_of_event = request.POST.get('date_of_event')
         description = request.POST.get('description')
 
-        # prevent submission if case number doesn't exist
-        if (not Infector.objects.filter(case_number=case_number).exists()):
-            context = {'msg':'Case number not found!'}
-            return render(request, 'cases/ok.html', context)
-
         infector = Infector.objects.get(case_number=case_number)
-        # TODO: prevent submission if event date not within 14 days of onset of symptom date
-        # TODO: prevent submission if event date is after date_of_confirmation
 
         data = retrive_Data(venue_location)
         print(data)
