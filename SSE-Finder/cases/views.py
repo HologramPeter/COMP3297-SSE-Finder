@@ -19,7 +19,7 @@ def check_infected(infector, event):
     latest_date_of_getting_infected = date_of_onset-dt.timedelta(days=2)
      # minus an extra day b/c datetime doesn't support >= operator ??
      # >= and <= are supported as long as >, < and == are defined
- 
+
     is_infected = (event_date >= easliest_date_of_getting_infected) and (event_date <= latest_date_of_getting_infected)
 
     print(is_infected)
@@ -76,7 +76,12 @@ def event_detail(request, case_number):
 
     if request.method == 'GET':
         infector = Infector.objects.get(case_number=case_number)
-        date_of_onset = infector.date_of_onset
+        print(type(infector.date_of_onset))
+        if isinstance(infector.date_of_onset, str):
+            date_of_onset = dt.datetime.strptime(infector.date_of_onset,"%Y-%m-%d")
+            date_of_onset = date_of_onset-dt.timedelta(days=14)
+        else:
+            date_of_onset = infector.date_of_onset-dt.timedelta(days=14)
         date_of_confirmation = infector.date_of_confirmation
         ctx = {
             'date_of_onset': date_of_onset,
