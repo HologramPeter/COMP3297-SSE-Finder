@@ -9,7 +9,7 @@ import datetime as dt
 def check_SSE(event):
     # if more than 6 attendance are mapped to this event and have infected=true, set SSE to true, else false
     # REMARKS: "An SSE is an event which results in more than 6 new infections." So I ignore "infected=true".
-    
+
     attendance = Attendance.objects.filter(event_attended=event)
     return len(attendance)>6
 
@@ -21,7 +21,7 @@ def check_infected(infector, event):
     latest_date_of_getting_infected = date_of_onset-dt.timedelta(days=2)
 
     is_infected = event_date >= easliest_date_of_getting_infected and event_date <= latest_date_of_getting_infected
-    
+
     print(is_infected)
     return is_infected
 
@@ -32,7 +32,7 @@ def check_infector(infector, event):
     easliest_date_of_infecting = date_of_onset-dt.timedelta(days=3)
 
     is_infector = event_date >= easliest_date_of_infecting
-    
+
     print(is_infector)
     return is_infector
 
@@ -69,6 +69,11 @@ def index_detail(request):
 
 # view for adding attendance records
 def event_detail(request, case_number):
+    # prevent access if case number doesn't exist
+    if (not Infector.objects.filter(case_number=case_number).exists()):
+        context = {'msg':'Case number not found!'}
+        return render(request, 'cases/ok.html', context)
+
     if request.method == 'GET':
         infector = Infector.objects.get(case_number=case_number)
         date_of_onset = infector.date_of_onset
@@ -85,14 +90,7 @@ def event_detail(request, case_number):
         date_of_event = request.POST.get('date_of_event')
         description = request.POST.get('description')
 
-        # prevent submission if case number doesn't exist
-        if (not Infector.objects.filter(case_number=case_number).exists()):
-            context = {'msg':'Case number not found!'}
-            return render(request, 'cases/ok.html', context)
-
         infector = Infector.objects.get(case_number=case_number)
-        # TODO: prevent submission if event date not within 14 days of onset of symptom date
-        # TODO: prevent submission if event date is after date_of_confirmation
 
         data = retrive_Data(venue_location)
         print(data)
