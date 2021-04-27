@@ -21,7 +21,7 @@ def check_infected(infector, event):
     is_infected = event_date > easliest_date_of_getting_infected and event_date < latest_date_of_getting_infected
 
     print(is_infected)
-    return is_inf
+    return is_infected
 
 def check_infector(infector, event):
     event_date = event.date_of_event
