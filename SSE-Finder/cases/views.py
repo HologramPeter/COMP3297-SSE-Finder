@@ -12,7 +12,7 @@ def check_SSE(event):
     return len(attendance)>6
 
 def check_infected(infector, event):
-    event_date = event.date_of_event
+    event_date = dt.datetime.strptime(event.date_of_event,"%Y-%m-%d") if (isinstance(event.date_of_event,str)) else event.date_of_event
     date_of_onset = infector.date_of_onset
 
     easliest_date_of_getting_infected = date_of_onset-dt.timedelta(days=14)
@@ -26,7 +26,7 @@ def check_infected(infector, event):
     return is_infected
 
 def check_infector(infector, event):
-    event_date = event.date_of_event
+    event_date = dt.datetime.strptime(event.date_of_event,"%Y-%m-%d") if (isinstance(event.date_of_event,str)) else event.date_of_event
     date_of_onset = infector.date_of_onset
 
     easliest_date_of_infecting = date_of_onset-dt.timedelta(days=3) # minus an extra day
