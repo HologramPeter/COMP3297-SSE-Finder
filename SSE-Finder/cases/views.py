@@ -178,8 +178,9 @@ def show_sse(request):
 def view_sse(request, event_pk):
     if request.method == 'GET':
         event = Event.objects.filter(pk=event_pk)
-        infector_list = Attendance.objects.filter(event_attended = event, is_infector = True)
-        infected_list = Attendance.objects.filter(event_attended = event, is_infected = True)
+        #needs to be fixed, unable to get list properly
+        infector_list = Attendance.objects.filter(event_attended = event, is_infector = True).values('infector')
+        infected_list = Attendance.objects.filter(event_attended = event, is_infected = True).values('infector')
         context = {'event':event, 'infector_list':infector_list, 'infected_list':infected_list}
         return render(request, 'cases/sse_view.html')
 
