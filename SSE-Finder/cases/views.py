@@ -173,6 +173,7 @@ def show_sse(request):
         context = {'start_date':start_date, 'end_date':end_date, 'events':events}
         return render(request, 'cases/sse.html', context)
 
+#view for sse lookup
 @login_required
 def view_sse(request, event_pk):
     if request.method == 'GET':
@@ -181,3 +182,28 @@ def view_sse(request, event_pk):
         infected_list = Attendance.objects.filter(event_attended = event, is_infected = True)
         context = {'event':event, 'infector_list':infector_list, 'infected_list':infected_list}
         return render(request, 'cases/sse_view.html')
+
+# view for looking up case details
+@login_required
+def detail_lookup(request):
+    if request.method == 'GET':
+        return render(request, 'cases/detaillookup_form.html')
+    if request.method == 'POST':
+        case_number = request.POST.get('case_number')
+
+        # check for infector
+        if (not Infector.objects.filter(case_number=case_number).exists()):
+            context = {'msg':'Record with case number ' + case_number + ' does not exist!!'}
+            return render(request, 'cases/ok.html', context)
+
+        infector = Infector.objects.filter(case_number=case_number)
+
+        #check for valid attendance
+        if (not Attendance.objects.filter(infector=infector[0]).exists()):
+            context = {'msg':'Attendance with case number ' + str(infector[0])+ ' does not exist!!'}
+            return render(request, 'cases/ok.html', context)
+
+        attendances = Attendance.objects.filter(infector=infector[0])
+
+        context = {'case_number':case_number, 'infector':infector, 'attendances':attendances}
+        return render(request, 'cases/detaillookup.html', context)
