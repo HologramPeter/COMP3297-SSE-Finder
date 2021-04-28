@@ -7,6 +7,7 @@ urlpatterns = [
     path('event/<int:case_number>', views.event_detail, name="event"),
     path('confirm', views.confirm_detail, name="confirm"),
     path('ssefinder', views.show_sse, name="sse_finder"),
+    path('detaillookup', views.detail_lookup, name="details"),
     
     path('', include('django.contrib.auth.urls')),
 ]
