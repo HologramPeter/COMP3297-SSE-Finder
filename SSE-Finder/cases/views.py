@@ -5,34 +5,32 @@ from cases.get import retrive_Data
 import datetime as dt
 from django.contrib.auth.decorators import login_required
 
-# PETER FINISH THESE 3 FUNCTIONS (can move them to other files)
 def check_SSE(event):
     # if more than 6 attendance are mapped to this event and have infected=true, set SSE to true, else false
     attendance = Attendance.objects.filter(event_attended=event).filter(is_infected=True) #TODO discuss if this is necessary
     return len(attendance)>6
 
 def check_infected(infector, event):
-    event_date = dt.datetime.strptime(event.date_of_event,"%Y-%m-%d") if (isinstance(event.date_of_event,str)) else event.date_of_event
+    event_date = dt.datetime.strptime(event.date_of_event,"%Y-%m-%d").date() if (isinstance(event.date_of_event,str)) else event.date_of_event
     date_of_onset = infector.date_of_onset
 
     easliest_date_of_getting_infected = date_of_onset-dt.timedelta(days=14)
     latest_date_of_getting_infected = date_of_onset-dt.timedelta(days=2)
-     # minus an extra day b/c datetime doesn't support >= operator ??
-     # >= and <= are supported as long as >, < and == are defined
- 
+
     is_infected = (event_date >= easliest_date_of_getting_infected) and (event_date <= latest_date_of_getting_infected)
 
     print(is_infected)
     return is_infected
 
 def check_infector(infector, event):
-    event_date = dt.datetime.strptime(event.date_of_event,"%Y-%m-%d") if (isinstance(event.date_of_event,str)) else event.date_of_event
+    event_date = dt.datetime.strptime(event.date_of_event,"%Y-%m-%d").date() if (isinstance(event.date_of_event,str)) else event.date_of_event
     date_of_onset = infector.date_of_onset
 
-    easliest_date_of_infecting = date_of_onset-dt.timedelta(days=3) # minus an extra day
+    easliest_date_of_infecting = date_of_onset-dt.timedelta(days=3)
 
     is_infector = (event_date >= easliest_date_of_infecting)
 
+    print(event_date, date_of_onset, easliest_date_of_infecting)
     print(is_infector)
     return is_infector
 
@@ -63,7 +61,7 @@ def create_attendance(infector, event_attended, description):
     return 'Attendance record added successfully.'
 
 # ----- create views here ------ #
-# homepage?
+# homepage
 @login_required
 def index_detail(request):
     return render(request, 'cases/home.html')
@@ -78,7 +76,12 @@ def event_detail(request, case_number):
 
     if request.method == 'GET':
         infector = Infector.objects.get(case_number=case_number)
-        date_of_onset = infector.date_of_onset
+        print(type(infector.date_of_onset))
+        if isinstance(infector.date_of_onset, str):
+            date_of_onset = dt.datetime.strptime(infector.date_of_onset,"%Y-%m-%d")
+            date_of_onset = date_of_onset-dt.timedelta(days=14)
+        else:
+            date_of_onset = infector.date_of_onset-dt.timedelta(days=14)
         date_of_confirmation = infector.date_of_confirmation
         ctx = {
             'date_of_onset': date_of_onset,
@@ -107,7 +110,7 @@ def event_detail(request, case_number):
 
         event = create_event(venue_name, venue_location, date_of_event, data)
         context = {'msg': create_attendance(infector, event, description)}
-        event.is_SSE = check_SSE(event) # PETER FINISH THIS
+        event.is_SSE = check_SSE(event)
         event.save()
         return render(request, 'cases/ok.html', context)
 
@@ -132,7 +135,7 @@ def confirm_detail(request):
         context = {'msg': create_attendance(infector, event, description)}
 
         # update SSE's
-        event.is_SSE = check_SSE(event) # PETER FINISH THIS
+        event.is_SSE = check_SSE(event)
         event.save()
         return render(request, 'cases/ok.html', context)
 
@@ -142,8 +145,6 @@ def case_detail(request):
     if request.method == 'GET':
         return render(request, 'cases/case.html')
     elif request.method == 'POST':
-        # TODO: prevent submission if date_of_confirmation is earlier than date_of_onset
-        # TODO: add some html form validation
         case_number = request.POST.get('case_number')
         person_name = request.POST.get('person_name')
         document_number = request.POST.get('document_number')
