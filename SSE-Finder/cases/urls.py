@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import include, path
 from cases import views
 
 urlpatterns = [
@@ -6,5 +6,7 @@ urlpatterns = [
     path("case", views.case_detail, name="case"),
     path('event/<int:case_number>', views.event_detail, name="event"),
     path('confirm', views.confirm_detail, name="confirm"),
-    path('ssefinder', views.show_sse, name="sse_finder")
+    path('ssefinder', views.show_sse, name="sse_finder"),
+    
+    path('', include('django.contrib.auth.urls')),
 ]

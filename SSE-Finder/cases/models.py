@@ -1,6 +1,20 @@
 from django.db import models
 from cases.get import retrive_Data
 
+# CHP staff number
+from django.core.exceptions import ValidationError
+from django.contrib.auth.admin import User
+
+def validate_length(value,length=6):
+    if len(str(value))!=length:
+        raise ValidationError(u'%s is not the correct length' % value)
+
+constraint_length_charField = models.CharField(max_length=6, validators=[validate_length], unique=True)
+User.add_to_class('CHP_staff_number', constraint_length_charField)
+
+
+
+# actual model
 class Infector(models.Model):
     case_number = models.IntegerField(unique=True)
     person_name = models.CharField(max_length=100)

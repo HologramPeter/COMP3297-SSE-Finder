@@ -1,9 +1,9 @@
-
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from cases.models import Infector, Event, Attendance
 from cases.get import retrive_Data
 import datetime as dt
+from django.contrib.auth.decorators import login_required
 
 # PETER FINISH THESE 3 FUNCTIONS (can move them to other files)
 def check_SSE(event):
@@ -64,10 +64,12 @@ def create_attendance(infector, event_attended, description):
 
 # ----- create views here ------ #
 # homepage?
+@login_required
 def index_detail(request):
     return render(request, 'cases/home.html')
 
 # view for adding attendance records
+@login_required
 def event_detail(request, case_number):
     # prevent access if case number doesn't exist
     if (not Infector.objects.filter(case_number=case_number).exists()):
@@ -110,6 +112,7 @@ def event_detail(request, case_number):
         return render(request, 'cases/ok.html', context)
 
 # view for when coordinate retrieval fails
+@login_required
 def confirm_detail(request):
     if request.method == 'GET':
         return render(request, 'cases/confirm.html')
@@ -134,6 +137,7 @@ def confirm_detail(request):
         return render(request, 'cases/ok.html', context)
 
 # view for adding new case
+@login_required
 def case_detail(request):
     if request.method == 'GET':
         return render(request, 'cases/case.html')
@@ -157,6 +161,7 @@ def case_detail(request):
         return render(request, 'cases/ok.html', context)
 
 # for showing list of all SSE's
+@login_required
 def show_sse(request):
     if request.method == 'GET':
         return render(request, 'cases/sse_form.html')
