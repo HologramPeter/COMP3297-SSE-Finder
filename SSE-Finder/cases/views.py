@@ -172,3 +172,12 @@ def show_sse(request):
         events = Event.objects.filter(is_SSE=True).order_by('-date_of_event').filter(date_of_event__range=[start_date, end_date])
         context = {'start_date':start_date, 'end_date':end_date, 'events':events}
         return render(request, 'cases/sse.html', context)
+
+@login_required
+def view_sse(request, event_pk):
+    if request.method == 'GET':
+        event = Event.objects.filter(pk=event_pk)
+        infector_list = Attendance.objects.filter(event_attended = event, is_infector = True)
+        infected_list = Attendance.objects.filter(event_attended = event, is_infected = True)
+        context = {'event':event, 'infector_list':infector_list, 'infected_list':infected_list}
+        return render(request, 'cases/sse_view.html')
