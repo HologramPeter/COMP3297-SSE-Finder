@@ -177,8 +177,8 @@ def show_sse(request):
 @login_required
 def view_sse(request, event_pk):
     if request.method == 'GET':
-        event = Event.objects.filter(pk=event_pk)
-        
+        event = Event.objects.get(pk=event_pk)
+
         infector_pk_list = Attendance.objects.filter(event_attended__pk = event_pk, is_infector = True).values_list('infector_id', flat=True).distinct()
         infected_pk_list = Attendance.objects.filter(event_attended__pk = event_pk, is_infected = True).values_list('infector_id', flat=True).distinct()
 
