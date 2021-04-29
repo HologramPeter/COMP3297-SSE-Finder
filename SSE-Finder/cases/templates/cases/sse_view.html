@@ -63,7 +63,7 @@
           {% endfor %}
         </table>
 
-        <div class="title"><p>Potential Infecteds</p></div>
+        <div class="title"><p>Potential Infected</p></div>
 
         <table class="datatable">
           <thead>
@@ -77,7 +77,7 @@
           {% for infected in infected_list %}
             <tr>
               <!-- % url 'case_details' infector.case_number % -->
-              <td><a href="">{{ infector.case_number }}</a></td>
+              <td><a href="">{{ infected.case_number }}</a></td>
               <td>{{ infected.person_name }}</td>
               <td>{{ infected.document_number }}</td>
               <td>{{ infected.date_of_birth }}</td>
@@ -87,7 +87,7 @@
           {% endfor %}
         </table>
 
-        <a href="/ssefinder">Back</a>
+        <button onclick="javascript:history.back();">Back</button>
     </div>
 </body>
 </html>

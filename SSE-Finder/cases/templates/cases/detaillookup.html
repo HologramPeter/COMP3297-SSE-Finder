@@ -18,25 +18,30 @@
             <p>Date of Onset: {{ inf.date_of_onset }}</p>
             <p>Date of Confirmation: {{ inf.date_of_confirmation }}</p>
         {% endfor %}
-        <table>
-          <thead>
-            <th>Infector Name</th>
-            <th>Event Attended</th>
-            <th>Description</th>
-            <th>Is Infector</th>
-            <th>Is Infected</th>
-          </thead>
-          {% for atd in attendances %}
-            <tr>
-              <td>{{ atd.infector }}</td>
-              <td>{{ atd.event_attended }}</td>
-              <td>{{ atd.description }}</td>
-              <td>{{ atd.is_infector }}</td>
-              <td>{{ atd.is_infected }}</td>
-            </tr>
-          {% endfor %}
-        </table>
-        <a href="detaillookup">Back</a>
+        {% if attendances %}
+          <table>
+            <thead>
+              <th>Infector Name</th>
+              <th>Event Attended</th>
+              <th>Description</th>
+              <th>Is Infector</th>
+              <th>Is Infected</th>
+            </thead>
+            {% for atd in attendances %}
+              <tr>
+                <td>{{ atd.infector }}</td>
+                <td>{{ atd.event_attended }}</td>
+                <td>{{ atd.description }}</td>
+                <td>{{ atd.is_infector }}</td>
+                <td>{{ atd.is_infected }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        {% endif %}
+        <div class="inputfield">
+          <a href="event/{{ case_number }}"><button class="btn">Add Event Attendance Record</button></a>
+        </div>
+        <button onclick="javascript:history.back();">Back</button>
     </div>
 </body>
 </html>

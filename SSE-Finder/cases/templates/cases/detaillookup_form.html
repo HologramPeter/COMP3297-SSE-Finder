@@ -10,7 +10,7 @@
 <body>
     <div class="wrapper">
         <div class="title">
-            <p>Detail Lookup Form</p>
+            <p>Retrieve Case Details</p>
         </div>
         <form action="detaillookup" method="POST"> {% csrf_token %}
             <div class="form">
@@ -22,7 +22,7 @@
                 </div>
             </div>
         </form>
-        <a href="/">Back</a>
-    </div> 
+    </div>
+    <button onclick="javascript:history.back();">Back</button>
 </body>
 </html>

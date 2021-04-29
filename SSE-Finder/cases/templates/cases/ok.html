@@ -1,1 +1,14 @@
-<h1>{{ msg }}</h1>
+{% if type == 'case_success' %}
+  <p>{{ msg }}</p>
+  <button onclick="window.location.href='/'">Home</button>
+{% endif %}
+
+{% if type == 'event_success' %}
+  <p>{{ msg }}</p>
+  <button onclick="window.location.href='/'">Home</button>
+{% endif %}
+
+{% if type == 'error_msg' %}
+  <p>{{ msg }}</p>
+  <button onclick="javascript:history.back();">Back</button>
+{% endif %}
