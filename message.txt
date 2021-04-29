@@ -1,3 +1,11 @@
+hologrampeter: branch HP
+	-added sse lookup and case lookup to dashboard
+	-renamed templates
+	-renamed urls
+	-renamed views
+	-changed views logic (switches to handle GET requests)
+	
+
 hologrampeter: added login system and CHP staff number
 hologrampeter: added testuser account in password.txt
 
