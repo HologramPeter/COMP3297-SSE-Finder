@@ -110,7 +110,7 @@ def event_detail(request, case_number):
 
         event = create_event(venue_name, venue_location, date_of_event, data)
         if (create_attendance(infector, event, description)):
-            context = {'msg': 'Attendance record added successfully', 'type':'event_success'}
+            context = {'msg': 'Attendance record added successfully', 'type':'event_success', 'case_number': case_number}
         else:
             context = {'msg': 'Duplicate: this attendance record already exists!', 'type':'error_msg'}
         event.is_SSE = check_SSE(event)
@@ -136,7 +136,7 @@ def confirm_detail(request):
         infector = Infector.objects.get(case_number=case_number)
         event = create_event(venue_name, venue_location, date_of_event, [])
         if (create_attendance(infector, event, description)):
-            context = {'msg': 'Attendance record added successfully', 'type':'event_success'}
+            context = {'msg': 'Attendance record added successfully', 'type':'event_success', 'case_number':case_number}
         else:
             context = {'msg': 'Duplicate: this attendance record already exists!', 'type':'error_msg'}
         # update SSE's
@@ -167,7 +167,7 @@ def case_detail(request):
             return render(request, 'cases/ok.html', context)
 
         Infector.objects.create(case_number=case_number, person_name=person_name, document_number=document_number, date_of_birth=date_of_birth, date_of_onset=date_of_onset, date_of_confirmation= date_of_confirmation)
-        context = {'msg': 'Case record added successfully', 'type':'case_success'}
+        context = {'msg': 'Case record added successfully', 'type':'case_success', 'case_number':case_number}
         return render(request, 'cases/ok.html', context)
 
 # for showing list of all SSE's
@@ -208,10 +208,14 @@ def detail_lookup(request):
         return render(request, 'cases/detaillookup_form.html')
     if request.method == 'POST':
         case_number = request.POST.get('case_number')
+        return redirect('/detailresults/' + case_number)
 
+@login_required
+def detail_results(request, case_number):
+    if request.method == 'GET':
         # check for infector
         if (not Infector.objects.filter(case_number=case_number).exists()):
-            context = {'msg':'Record with case number ' + case_number + ' does not exist!', 'type':'error_msg'}
+            context = {'msg':'Record with case number ' + str(case_number) + ' does not exist!', 'type':'error_msg'}
             return render(request, 'cases/ok.html', context)
 
         infector = Infector.objects.filter(case_number=case_number)

@@ -53,7 +53,7 @@
           {% for infector in infector_list %}
             <tr>
               <!-- % url 'case_details' infector.case_number % -->
-              <td><a href="">{{ infector.case_number }}</a></td>
+              <td><a href="{% url 'case_results' infector.case_number %}">{{ infector.case_number }}</a></td>
               <td>{{ infector.person_name }}</td>
               <td>{{ infector.document_number }}</td>
               <td>{{ infector.date_of_birth }}</td>
@@ -77,7 +77,7 @@
           {% for infected in infected_list %}
             <tr>
               <!-- % url 'case_details' infector.case_number % -->
-              <td><a href="">{{ infected.case_number }}</a></td>
+              <td><a href="{% url 'case_results' infected.case_number %}">{{ infected.case_number }}</a></td>
               <td>{{ infected.person_name }}</td>
               <td>{{ infected.document_number }}</td>
               <td>{{ infected.date_of_birth }}</td>

@@ -1,11 +1,13 @@
 {% if type == 'case_success' %}
   <p>{{ msg }}</p>
   <button onclick="window.location.href='/'">Home</button>
+  <button onclick="window.location.href='{% url 'case_results' case_number %}'">View Details</button>
 {% endif %}
 
 {% if type == 'event_success' %}
   <p>{{ msg }}</p>
   <button onclick="window.location.href='/'">Home</button>
+  <button onclick="window.location.href='{% url 'case_results' case_number %}'">View Details</button>
 {% endif %}
 
 {% if type == 'error_msg' %}

@@ -10,7 +10,8 @@ urlpatterns = [
     path('ssefinder', views.show_sse, name="sse_finder"),
     path('ssefinder/<int:event_pk>', views.view_sse, name="view_sse"),
     path('detaillookup', views.detail_lookup, name="case_details"),
-    
+    path('detailresults/<int:case_number>', views.detail_results, name="case_results"),
+
     path("login", auth_views.LoginView.as_view(), name="login"),
     path("logout", auth_views.LogoutView.as_view(), name="logout"),
 ]
