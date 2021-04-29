@@ -1,17 +1,20 @@
-from django.urls import include, path
+from django.urls import include, path, re_path
 from cases import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path("", views.index_detail, name="index"),
-    path("case", views.case_detail, name="case"),
-    path('event/<int:case_number>', views.event_detail, name="event"),
-    path('confirm', views.confirm_detail, name="confirm"),
-    path('ssefinder', views.show_sse, name="sse_finder"),
-    path('ssefinder/<int:event_pk>', views.view_sse, name="view_sse"),
-    path('detaillookup', views.detail_lookup, name="case_details"),
-    path('detailresults/<int:case_number>', views.detail_results, name="case_results"),
-
     path("login", auth_views.LoginView.as_view(), name="login"),
     path("logout", auth_views.LogoutView.as_view(), name="logout"),
+
+    path("", views.index_view, name="index"),
+
+    path('case', views.case_lookup_view, name="case"),
+    path('case/<int:case_number>', views.case_view, name="view_case"),
+
+    # handles get and post
+    path("case/add", views.add_case_view, name="add_case_view"),
+    path('case/<int:case_number>/add_event', views.add_event_view, name="add_event"),
+
+    re_path('ssefinder', views.sse_lookup_view, name="sse_finder"),
+    path('ssefinder/<int:event_pk>', views.sse_view, name="view_sse"),
 ]

@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSEFinder</title>
+
+    <script src='https://code.jquery.com/jquery-3.5.1.js'></script>
+		<script type='text/javascript' src='https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js'></script>
+		<!-- <script type='text/javascript' src='https://cdn.datatables.net/fixedheader/3.1.8/js/dataTables.fixedHeader.min.js'></script> -->
+		<script src='{% static 'script.js' %}'></script>
+
+		<link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/v/dt/dt-1.10.24/datatables.min.css'/>
+		<!-- <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/fixedheader/3.1.8/css/fixedHeader.dataTables.min.css'/> -->
+    <link rel="stylesheet" href="{% static 'form.css' %}">
+
+</head>
+<body>
+    <div class="wrapper">
+        <div class="title"><p>Potential SSEs</p></div>
+        <p>{{ start_date }} to {{ end_date }}</p>
+        <table class="datatable">
+          <thead>
+            <th>Venue Name</th>
+            <th>Venue Location</th>
+            <th>Date</th>
+            <th>Address</th>
+            <th>X-Coordinate</th>
+            <th>Y-Coordinate</th>
+          </thead>
+          {% for evt in events %}
+            <tr>
+                <td><a href="{% url 'view_sse' evt.pk %}">{{ evt.venue_name }}</a></td>
+                <td>{{ evt.venue_location }}</td>
+                <td>{{ evt.date_of_event }}</td>
+                <td>{{ evt.venue_address }}</td>
+                <td>{{ evt.venue_x_coord }}</td>
+                <td>{{ evt.venue_y_coord }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+        <button onclick="javascript:history.back();">Back</button>
+    </div>
+</body>
+</html>

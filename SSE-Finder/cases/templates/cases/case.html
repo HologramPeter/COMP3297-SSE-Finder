@@ -5,56 +5,44 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Case Submit From</title>
+    <title>Case Details</title>
     <link rel="stylesheet" href="{% static 'form.css' %}">
 </head>
 <body>
     <div class="wrapper">
-        <div class="title">
-            <p>Add Case Record</p>
+        <div class="title"><p>Case Details</p></div>
+        <p>Case number: {{ case_number }}</p>
+        {% for inf in infector %}
+            <p>Person Name: {{ inf.person_name }}</p>
+            <p>Document Number: {{ inf.document_number }}</p>
+            <p>Date of Birth: {{ inf.date_of_birth }}</p>
+            <p>Date of Onset: {{ inf.date_of_onset }}</p>
+            <p>Date of Confirmation: {{ inf.date_of_confirmation }}</p>
+        {% endfor %}
+        {% if attendances %}
+          <table>
+            <thead>
+              <th>Infector Name</th>
+              <th>Event Attended</th>
+              <th>Description</th>
+              <th>Is Infector</th>
+              <th>Is Infected</th>
+            </thead>
+            {% for atd in attendances %}
+              <tr>
+                <td>{{ atd.infector }}</td>
+                <td>{{ atd.event_attended }}</td>
+                <td>{{ atd.description }}</td>
+                <td>{{ atd.is_infector }}</td>
+                <td>{{ atd.is_infected }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        {% endif %}
+        <div class="inputfield">
+          <a href="{{ case_number }}/add_event"><button class="btn">Add Event Attendance Record</button></a>
         </div>
-        <form action="case" method="POST"> {% csrf_token %}
-            <div class="form">
-                <div class="inputfield">
-                    <label for="case_number"><span>Case Number:</span></label>
-                    <input type="number" class="input" id="case_number" name="case_number" required>
-                </div>
-                <div class="inputfield">
-                    <label for="person_name"><span>Person Name:</span></label>
-                    <input type="text" class="input" id="person_name" name="person_name" required>
-                </div>
-                <div class="inputfield">
-                    <label for="document_number"><span>Document Number</span></label>
-                    <input type="text" class="input" id="document_number" name="document_number" required>
-                </div>
-                <div class="inputfield">
-                    <label for="date_of_birth"><span>Date of Birth:</span></label>
-                    <input type="date" class="input" id="date_of_birth" name="date_of_birth" required>
-                </div>
-                <div class="inputfield">
-                    <label for="date_of_onset"><span>Date of Onset:</span></label>
-                    <input type="date" class="input" id="date_of_onset" name="date_of_onset" required>
-                </div>
-                <div class="inputfield">
-                    <label for="date_of_confirmation"><span>Date of Confirmation:</span></label>
-                    <input type="date" class="input" id="date_of_confirmation" name="date_of_confirmation" required>
-                </div>
-                <div class="inputfield">
-                    <input type="submit" value="Submit" class="btn">
-                </div>
-            </div>
-        </form>
-        <button onclick="window.location.href='/'">Back</button>
+        <button onclick="javascript:history.back();">Back</button>
     </div>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type="text/javascript">
-        var date_of_onset;
-        $('#date_of_onset').on('change',function(){
-            date_of_onset = $(this).val()
-            $('#date_of_confirmation').prop('min',function(){
-                return date_of_onset
-            });
-        });
-    </script>
 </body>
 </html>

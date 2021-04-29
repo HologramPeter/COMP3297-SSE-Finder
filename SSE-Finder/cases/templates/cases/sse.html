@@ -19,9 +19,8 @@
 </head>
 <body>
     <div class="wrapper">
-        <div class="title"><p>Potential SSEs</p></div>
-        <p>{{ start_date }} to {{ end_date }}</p>
-        <table class="datatable">
+        <div class="title"><p>Potential SSE</p></div>
+        <table id = "event">
           <thead>
             <th>Venue Name</th>
             <th>Venue Location</th>
@@ -30,17 +29,64 @@
             <th>X-Coordinate</th>
             <th>Y-Coordinate</th>
           </thead>
-          {% for evt in events %}
             <tr>
-                <td><a href="{% url 'view_sse' evt.pk %}">{{ evt.venue_name }}</a></td>
-                <td>{{ evt.venue_location }}</td>
-                <td>{{ evt.date_of_event }}</td>
-                <td>{{ evt.venue_address }}</td>
-                <td>{{ evt.venue_x_coord }}</td>
-                <td>{{ evt.venue_y_coord }}</td>
+              <td>{{ event.venue_name }}</td>
+              <td>{{ event.venue_location }}</td>
+              <td>{{ event.date_of_event }}</td>
+              <td>{{ event.venue_address }}</td>
+              <td>{{ event.venue_x_coord }}</td>
+              <td>{{ event.venue_y_coord }}</td>
+            </tr>
+        </table>
+
+        <div class="title"><p>Potential Infectors</p></div>
+
+        <table class="datatable">
+          <thead>
+            <th>Case Number</th>
+            <th>Person Name</th>
+            <th>Document Number</th>
+            <th>Date of Birth</th>
+            <th>Date of Onset</th>
+            <th>Date of Confirmation</th>
+          </thead>
+          {% for infector in infector_list %}
+            <tr>
+              <!-- % url 'case_details' infector.case_number % -->
+              <td><a href="{% url 'case_results' infector.case_number %}">{{ infector.case_number }}</a></td>
+              <td>{{ infector.person_name }}</td>
+              <td>{{ infector.document_number }}</td>
+              <td>{{ infector.date_of_birth }}</td>
+              <td>{{ infector.date_of_onset }}</td>
+              <td>{{ infector.date_of_confirmation }}</td>
             </tr>
           {% endfor %}
         </table>
+
+        <div class="title"><p>Potential Infected</p></div>
+
+        <table class="datatable">
+          <thead>
+            <th>Case Number</th>
+            <th>Person Name</th>
+            <th>Document Number</th>
+            <th>Date of Birth</th>
+            <th>Date of Onset</th>
+            <th>Date of Confirmation</th>
+          </thead>
+          {% for infected in infected_list %}
+            <tr>
+              <!-- % url 'case_details' infector.case_number % -->
+              <td><a href="{% url 'case_results' infected.case_number %}">{{ infected.case_number }}</a></td>
+              <td>{{ infected.person_name }}</td>
+              <td>{{ infected.document_number }}</td>
+              <td>{{ infected.date_of_birth }}</td>
+              <td>{{ infected.date_of_onset }}</td>
+              <td>{{ infected.date_of_confirmation }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+
         <button onclick="javascript:history.back();">Back</button>
     </div>
 </body>

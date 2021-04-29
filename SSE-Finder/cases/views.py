@@ -5,6 +5,8 @@ from cases.get import retrive_Data
 import datetime as dt
 from django.contrib.auth.decorators import login_required
 
+#------------------SSE functions---------------------#
+
 def check_SSE(event):
     # if more than 6 attendance are mapped to this event and have infected=true, set SSE to true, else false
     attendance = Attendance.objects.filter(event_attended=event).filter(is_infected=True) #TODO discuss if this is necessary
@@ -35,6 +37,9 @@ def check_infector(infector, event):
     return is_infector
 
 
+
+# ----- record creation functions ------ #
+
 # check if event exists in database already, if not then create a new one and return it
 def create_event(venue_name, venue_location, date_of_event, data):
     record = Event.objects.filter(venue_name=venue_name, venue_location=venue_location, date_of_event=date_of_event)
@@ -60,19 +65,79 @@ def create_attendance(infector, event_attended, description):
     attendance = Attendance.objects.create(infector=infector, event_attended=event_attended, description=description, is_infected=is_infected, is_infector=is_infector)
     return True
 
+
+
 # ----- create views here ------ #
 # homepage
 @login_required
-def index_detail(request):
-    return render(request, 'cases/home.html')
+def index_view(request):
+    return render(request, 'cases/index.html')
+
+
+
+# view for looking up case by number
+@login_required
+def case_lookup_view(request):
+    if request.method == 'GET':
+        return render(request, 'cases/case_lookup.html')
+    if request.method == 'POST':
+        case_number = request.POST.get('case_number')
+        return redirect('/case/' + case_number)
+
+# view for case
+@login_required
+def case_view(request, case_number):
+    if request.method == 'GET':
+        # check for infector
+        if (not Infector.objects.filter(case_number=case_number).exists()):
+            context = {'msg':'Record with case number ' + str(case_number) + ' does not exist!', 'type':'error_msg'}
+            return render(request, 'cases/message.html', context)
+
+        infector = Infector.objects.filter(case_number=case_number)
+        context = {'case_number':case_number, 'infector':infector}
+
+        #check for valid attendance
+        if Attendance.objects.filter(infector=infector[0]).exists():
+            attendances = Attendance.objects.filter(infector=infector[0])
+            context['attendances'] = attendances
+
+        return render(request, 'cases/case.html', context)
+
+
+
+# view for adding new case
+@login_required
+def add_case_view(request):
+    if request.method == 'GET':
+        return render(request, 'cases/add_case.html')
+    elif request.method == 'POST':
+        case_number = request.POST.get('case_number')
+        person_name = request.POST.get('person_name')
+        document_number = request.POST.get('document_number')
+        date_of_birth = request.POST.get('date_of_birth')
+        date_of_onset = request.POST.get('date_of_onset')
+        date_of_confirmation = request.POST.get('date_of_confirmation')
+
+        # check for duplicate
+        if Infector.objects.filter(case_number=case_number).exists():
+            context = {'msg':'Case with case number ' + case_number + ' already exists!', 'type':'error_msg'}
+            return render(request, 'cases/message.html', context)
+
+        if Infector.objects.filter(document_number=document_number).exists():
+            context = {'msg':'Case with document number ' + document_number + ' already exists!', 'type':'error_msg'}
+            return render(request, 'cases/message.html', context)
+
+        Infector.objects.create(case_number=case_number, person_name=person_name, document_number=document_number, date_of_birth=date_of_birth, date_of_onset=date_of_onset, date_of_confirmation= date_of_confirmation)
+        context = {'msg': 'Case record added successfully', 'type':'case_success', 'case_number':case_number}
+        return render(request, 'cases/message.html', context)
 
 # view for adding attendance records
 @login_required
-def event_detail(request, case_number):
+def add_event_view(request, case_number):
     # prevent access if case number doesn't exist
     if (not Infector.objects.filter(case_number=case_number).exists()):
         context = {'msg':'Case number not found!', 'type':'error_msg'}
-        return render(request, 'cases/ok.html', context)
+        return render(request, 'cases/message.html', context)
 
     if request.method == 'GET':
         infector = Infector.objects.get(case_number=case_number)
@@ -87,7 +152,7 @@ def event_detail(request, case_number):
             'date_of_onset': date_of_onset,
             'date_of_confirmation': date_of_confirmation
         }
-        return render(request, 'cases/event.html', ctx)
+        return render(request, 'cases/add_event.html', ctx)
 
     if request.method == 'POST':
         venue_name = request.POST.get('venue_name')
@@ -115,7 +180,51 @@ def event_detail(request, case_number):
             context = {'msg': 'Duplicate: this attendance record already exists!', 'type':'error_msg'}
         event.is_SSE = check_SSE(event)
         event.save()
-        return render(request, 'cases/ok.html', context)
+        return render(request, 'cases/message.html', context)
+
+
+
+#view for sse lookup
+@login_required
+def sse_lookup_view(request):
+    if request.method == 'GET':
+        start_date = request.GET.get('startdate')
+        end_date = request.GET.get('enddate')
+
+        if start_date == None or end_date == None:
+            return render(request, 'cases/sse_lookup.html')
+
+        events = Event.objects.filter(is_SSE=True).order_by('-date_of_event').filter(date_of_event__range=[start_date, end_date])
+        context = {'start_date':start_date, 'end_date':end_date, 'events':events}
+        return render(request, 'cases/sse_list.html', context)
+
+    if request.method == 'POST':
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+
+        return redirect('/ssefinder/?startdate=' + start_date + '&enddate=' + end_date)
+
+
+#view for sse view
+@login_required
+def sse_view(request, event_pk):
+    if request.method == 'GET':
+        if (not Event.objects.filter(pk=event_pk).exists()):
+            context = {'msg':'Invalid URL', 'type':'error_msg'}
+            return render(request, 'cases/message.html', context)
+
+        event = Event.objects.get(pk=event_pk)
+
+        infector_pk_list = Attendance.objects.filter(event_attended__pk = event_pk, is_infector = True).values_list('infector_id', flat=True).distinct()
+        infected_pk_list = Attendance.objects.filter(event_attended__pk = event_pk, is_infected = True).values_list('infector_id', flat=True).distinct()
+
+        infector_list = Infector.objects.filter(pk__in=infector_pk_list)
+        infected_list = Infector.objects.filter(pk__in=infected_pk_list)
+
+        context = {'event':event, 'infector_list':infector_list, 'infected_list':infected_list}
+        return render(request, 'cases/sse.html', context)
+
+
 
 # view for when coordinate retrieval fails
 @login_required
@@ -142,88 +251,5 @@ def confirm_detail(request):
         # update SSE's
         event.is_SSE = check_SSE(event)
         event.save()
-        return render(request, 'cases/ok.html', context)
+        return render(request, 'cases/message.html', context)
 
-# view for adding new case
-@login_required
-def case_detail(request):
-    if request.method == 'GET':
-        return render(request, 'cases/case.html')
-    elif request.method == 'POST':
-        case_number = request.POST.get('case_number')
-        person_name = request.POST.get('person_name')
-        document_number = request.POST.get('document_number')
-        date_of_birth = request.POST.get('date_of_birth')
-        date_of_onset = request.POST.get('date_of_onset')
-        date_of_confirmation = request.POST.get('date_of_confirmation')
-
-        # check for duplicate
-        if Infector.objects.filter(case_number=case_number).exists():
-            context = {'msg':'Case with case number ' + case_number + ' already exists!', 'type':'error_msg'}
-            return render(request, 'cases/ok.html', context)
-
-        if Infector.objects.filter(document_number=document_number).exists():
-            context = {'msg':'Case with document number ' + document_number + ' already exists!', 'type':'error_msg'}
-            return render(request, 'cases/ok.html', context)
-
-        Infector.objects.create(case_number=case_number, person_name=person_name, document_number=document_number, date_of_birth=date_of_birth, date_of_onset=date_of_onset, date_of_confirmation= date_of_confirmation)
-        context = {'msg': 'Case record added successfully', 'type':'case_success', 'case_number':case_number}
-        return render(request, 'cases/ok.html', context)
-
-# for showing list of all SSE's
-@login_required
-def show_sse(request):
-    if request.method == 'GET':
-        return render(request, 'cases/sse_form.html')
-    if request.method == 'POST':
-        start_date = request.POST.get('start_date')
-        end_date = request.POST.get('end_date')
-        events = Event.objects.filter(is_SSE=True).order_by('-date_of_event').filter(date_of_event__range=[start_date, end_date])
-        context = {'start_date':start_date, 'end_date':end_date, 'events':events}
-        return render(request, 'cases/sse.html', context)
-
-#view for sse lookup
-@login_required
-def view_sse(request, event_pk):
-    if request.method == 'GET':
-        if (not Event.objects.filter(pk=event_pk).exists()):
-            context = {'msg':'Invalid URL', 'type':'error_msg'}
-            return render(request, 'cases/ok.html', context)
-
-        event = Event.objects.get(pk=event_pk)
-
-        infector_pk_list = Attendance.objects.filter(event_attended__pk = event_pk, is_infector = True).values_list('infector_id', flat=True).distinct()
-        infected_pk_list = Attendance.objects.filter(event_attended__pk = event_pk, is_infected = True).values_list('infector_id', flat=True).distinct()
-
-        infector_list = Infector.objects.filter(pk__in=infector_pk_list)
-        infected_list = Infector.objects.filter(pk__in=infected_pk_list)
-
-        context = {'event':event, 'infector_list':infector_list, 'infected_list':infected_list}
-        return render(request, 'cases/sse_view.html', context)
-
-# view for looking up case details
-@login_required
-def detail_lookup(request):
-    if request.method == 'GET':
-        return render(request, 'cases/detaillookup_form.html')
-    if request.method == 'POST':
-        case_number = request.POST.get('case_number')
-        return redirect('/detailresults/' + case_number)
-
-@login_required
-def detail_results(request, case_number):
-    if request.method == 'GET':
-        # check for infector
-        if (not Infector.objects.filter(case_number=case_number).exists()):
-            context = {'msg':'Record with case number ' + str(case_number) + ' does not exist!', 'type':'error_msg'}
-            return render(request, 'cases/ok.html', context)
-
-        infector = Infector.objects.filter(case_number=case_number)
-        context = {'case_number':case_number, 'infector':infector}
-
-        #check for valid attendance
-        if Attendance.objects.filter(infector=infector[0]).exists():
-            attendances = Attendance.objects.filter(infector=infector[0])
-            context['attendances'] = attendances
-
-        return render(request, 'cases/detaillookup.html', context)
