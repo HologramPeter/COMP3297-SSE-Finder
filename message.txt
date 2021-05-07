@@ -1,0 +1,25 @@
+hologrampeter: branch HP
+	-added sse lookup and case lookup to dashboard
+	-renamed templates
+	-renamed urls
+	-renamed views
+	-changed views logic (switches to handle GET requests)
+	
+
+hologrampeter: added login system and CHP staff number
+hologrampeter: added testuser account in password.txt
+
+comp3297isbad: Updated the model
+comp3297isbad: not yet the do marigation 
+
+comp3297isbad: both form of event and case use the same css file
+comp3297isbad: the presentation of x_cord y_cord and address needed to be defined
+comp3297isbad: created the view of the case form
+comp3297isbad: finish the directing of all the forms
+
+comp3297isbad: comfirm.html need to add back a redirect <a href></a> for exit
+
+kittietlam: cleaned up the github repo
+kittietlam: renamed 'website' -> 'config' and 'demo_app' -> 'cases' for clarity
+
+xxx

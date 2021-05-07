@@ -1,0 +1,128 @@
+<button id="menu_button" class="menu_icon">
+	<div></div>
+	<div></div>
+	<div></div>
+</button>
+
+<div id="menu" class="menu_inactive">
+    <div style="position: relative; top: 100px;">
+		<div><a class="menu_txt" href="/">Home</a></div>
+        <div><a class="menu_txt" href="/case">Case Search</a></div>
+        <div><a class="menu_txt" href="/case/add" target="_blank">Add Case</a></div>
+        <div><a class="menu_txt" href="/ssefinder" target="_blank">SSE Finder</a></div>
+    </div>
+</div>
+
+<style>
+    
+/*nav style*/
+
+.menu_icon{
+	cursor: pointer;
+	height: 100px;
+	width: 100px;
+	background-color: rgba(208,208,208,1);
+	border-radius: 10px;
+	-ms-transform: scale(0.4,0.4); /* IE 9 */
+	-webkit-transform: scale(0.4,0.4); /* Safari */
+	transform: scale(0.4,0.4); /* Standard syntax */
+	position: fixed;
+	top: -5px;
+	left: 0px;
+	padding: 0;
+	border: none;
+	z-index: 2;
+}
+
+.menu_icon div{
+	height: 10px;
+	width: 80px;
+	background-color: #202020;
+	border-radius: 5px;
+	margin: 0 auto;
+	margin-top: 15px;
+	position: relative;
+	top: -5px;
+}
+.menu_icon:hover{
+	background-color: #202020;
+	transition: background-color 0.5s;
+}
+
+.menu_icon:hover div{
+	background-color: #D0D0D0;
+	transition: background-color 0.5s;
+}
+
+.menu_inactive, .menu_active{
+	height: 110vh;
+	width: 200px;
+	position: fixed;
+	top: 0px;
+	background-color:rgba(19, 62, 166, 0.9);
+	transition: left 0.5s ease;
+	z-index: 1;
+}
+.menu_inactive{
+	left: -200px;
+}
+
+.menu_active{
+	left: 0px;
+	
+}
+
+.menu_txt{
+	background-color: none;
+	color: white;
+	transition: color, background-color 0.5s;
+	text-decoration: none;
+	font: Gotham, "Helvetica Neue", Helvetica, Arial, "sans-serif";
+    padding: 15px 0px 15px 0px;
+	display: -webkit-flex; /* Safari */
+  	-webkit-justify-content: center; /* Safari 6.1+ */
+  	display: flex;
+  	justify-content: center;
+}
+
+
+.menu_txt:hover {
+  	background-color: #FFFFFF;
+	color: black;
+}
+
+.menu_img{
+    padding: 5px 0px 5px 0px;
+	display: -webkit-flex; /* Safari */
+  	-webkit-justify-content: center; /* Safari 6.1+ */
+  	display: flex;
+  	justify-content: center;
+}
+
+.menu_img img{
+	width: 50px;
+	height: 50px;
+}
+
+.menu_img{
+	padding: 10px;
+	background-color: none;
+	transition: background-color 0.5s;
+}
+
+.menu_img:hover{
+  	background-color: #FFFFFF;
+}
+
+
+/*nav end*/
+</style>
+
+<script>
+    var menu_button = document.getElementById('menu_button');
+    var menu = document.getElementById('menu');
+    menu_button.addEventListener('click', function(){
+        if (menu.getAttribute('class') == 'menu_inactive') menu.setAttribute('class', 'menu_active');
+        else menu.setAttribute('class', 'menu_inactive');
+    });
+</script>

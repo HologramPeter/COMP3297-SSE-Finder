@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body{
+    background: rgb(197, 223, 235);
+}
+
+.back{
+    margin: 20px 10px;
+    padding: 5px 10px;
+    display: block;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    
+    background-color: rgb(197, 223, 235);
+    color: #0063B2FF;
+}
+
+.back:hover{
+    transition: 0.3s;
+    background-color: #0063B2FF;
+    color: rgb(197, 223, 235);
+}
+
+.wide-wrapper{
+    width: 100%;
+    max-width: 1000px;
+    min-width: 700px;
+    margin: 20px auto;
+    height: auto;
+    padding: 40px 30px 20px 40px;
+    background: #FFFFFFFF;
+}
+
+.wrapper{
+    width: 100%;
+    max-width: 650px;
+    margin: 20px auto;
+    height: auto;
+    padding: 40px 30px 20px 40px;
+    background: #FFFFFFFF;
+}
+
+.wide-wrapper .title,
+.wrapper .title{
+    font-size: 28px;
+    font-weight: 500;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 20px auto;
+    color: #0063B2FF;
+}
+.wide-wrapper .form,
+.wrapper .form{
+    width: 100%;
+    height: auto;
+    display: flex;
+    border: 1px solid #0063B2FF;
+    border-radius: 15px;
+    padding: 10px 5px 10px 5px;
+    flex-direction: column;
+}
+.wide-wrapper .form .inputfield,
+.wrapper .form .inputfield {
+    margin: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.wide-wrapper .form .inputfield label,
+.wrapper .form .inputfield label{
+    display: block;
+    float: left;
+    margin-right: 5px;
+}
+.wide-wrapper .form .inputfield label span,
+.wrapper .form .inputfield label span{
+    color: #0063B2FF;
+    margin: auto 5px;
+    font-size: 16px;
+    font-weight: 200;
+    height: 100%;
+}
+.wide-wrapper .form .inputfield input,
+.wrapper .form .inputfield input{
+    width: 70%;
+    outline: none;
+    border: 1px solid grey;
+    border-radius: 3px;
+    padding: 8px 10px;
+}
+.wide-wrapper .form .inputfield textarea,
+.wrapper .form .inputfield textarea{
+    width: 70%;
+    outline: none;
+    border: 1px solid grey;
+    border-radius: 3px;
+    padding: 8px 10px;
+    resize: none;
+    height: 100px;
+}
+
+.wrapper .form .inputfield textarea:focus,
+.wrapper .form .inputfield textarea:focus{
+    border: 1px solid F95700FF;
+}
+
+.wide-wrapper .form .inputfield input:focus,
+.wrapper .form .inputfield input:focus{
+    border: 1px solid F95700FF;
+}
+
+.wide-wrapper .form .inputfield .btn,
+.wrapper .form .inputfield .btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px 10px;
+    font-size: 18px;
+    color: white;
+    background: #0063B2FF;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    border: 0px;
+    opacity: 1;
+    transition: 0.3s;
+}
+.wide-wrapper .form .inputfield .btn:hover,
+.wrapper .form .inputfield .btn:hover{
+    opacity: 0.6;
+}
+
+.table{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table, .table th, .table td{
+    border: #0063B2FF solid 1px;
+    padding:5px 10px;
+}
+
+
+@media (max-width:420px){
+    .wide-wrapper .form .inputfield,
+    .wrapper .form .inputfield{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .wide-wrapper .form .inputfield,
+    .wrapper .form .inputfield lebel{
+        margin-bottom: 5px;
+    }
+}

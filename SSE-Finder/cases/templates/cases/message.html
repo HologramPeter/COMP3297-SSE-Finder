@@ -1,0 +1,25 @@
+{% if type == 'case_success' %}
+  <div class="title"><p>Success</p></div>
+  <p>{{ msg }}</p>
+  <div style="display:flex; flex-direction: row;">
+    <button type="button" class="back" onclick="window.location.href='/'">Home</button>
+    <button type="button" class="back" onclick="window.location.href='{% url 'view_case' case_number %}'">View Details</button>
+  </div>
+{% endif %}
+
+{% if type == 'event_success' %}
+  <div class="title"><p>Success</p></div>
+  <p>{{ msg }}</p>
+  <div style="display:flex; flex-direction: row;">
+    <button type="button" class="back" onclick="window.location.href='/'">Home</button>
+    <button type="button" class="back" onclick="window.location.href='{% url 'view_case' case_number %}'">View Details</button>
+  </div>
+{% endif %}
+
+{% if type == 'error_msg' %}
+  <div class="title"><p>Error</p></div>
+  <p>{{ msg }}</p>
+  <div style="display:flex; flex-direction: row;">
+    <button type="button" class="back" onclick="close_popup()">Close</button>
+  </div>
+{% endif %}

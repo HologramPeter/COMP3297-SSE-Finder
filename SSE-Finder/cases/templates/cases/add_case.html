@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Submit From</title>
+
+    <link rel="stylesheet" href="{% static 'form.css' %}">
+</head>
+<body>
+    {% include "cases/nav_menu.html" %}
+    <div class="wrapper">
+        <div class="title">
+            <p>Add Case Record</p>
+        </div>
+        <form id="form" action="" method="POST"> {% csrf_token %}
+            <div class="form">
+                <div class="inputfield">
+                    <label for="case_number"><span>Case Number:</span></label>
+                    <input type="number" class="input" id="case_number" name="case_number" required>
+                </div>
+                <div class="inputfield">
+                    <label for="person_name"><span>Person Name:</span></label>
+                    <input type="text" class="input" id="person_name" name="person_name" required>
+                </div>
+                <div class="inputfield">
+                    <label for="document_number"><span>Document Number</span></label>
+                    <input type="text" class="input" id="document_number" name="document_number" required>
+                </div>
+                <div class="inputfield">
+                    <label for="date_of_birth"><span>Date of Birth:</span></label>
+                    <input type="date" class="input" id="date_of_birth" name="date_of_birth" required>
+                </div>
+                <div class="inputfield">
+                    <label for="date_of_onset"><span>Date of Onset:</span></label>
+                    <input type="date" class="input" id="date_of_onset" name="date_of_onset" required>
+                </div>
+                <div class="inputfield">
+                    <label for="date_of_confirmation"><span>Date of Confirmation:</span></label>
+                    <input type="date" class="input" id="date_of_confirmation" name="date_of_confirmation" required>
+                </div>
+                
+                <div class="inputfield" id="form-message" style="color:red; display:none;"></div>
+
+                <div class="inputfield">
+                    {% include "cases/popup.html" %}
+                    <input class="btn" type="button" onclick="my_submit()" value="Submit" />
+                </div>
+            </div>
+        </form>
+        
+        <button class="back" onclick="javascript:history.back();">Back</button>
+    </div>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        Date.prototype.addDays = function(days) {
+            var date = new Date(this.valueOf());
+            date.setDate(date.getDate() + days);
+            return date;
+        }
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) 
+                month = '0' + month;
+            if (day.length < 2) 
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+
+        var date_of_birth;
+        
+        $('#date_of_birth').on('change',function(){
+            date_of_birth = $(this).val()
+            $('#date_of_onset').prop('min',function(){
+                return date_of_birth
+            });
+            $('#date_of_confirmation').prop('min',function(){
+                return date_of_birth
+            });
+        });
+
+        var infectious_period;
+        $('#date_of_onset').on('change',function(){
+            infectious_period = formatDate($_('date_of_onset').valueAsDate.addDays(-3));
+            $('#date_of_confirmation').prop('min',function(){
+                return infectious_period
+            });
+        });
+
+        function my_submit(){
+            _submit(function (form){
+                var messages = [];
+
+                var dob = form.elements['date_of_birth'].valueAsDate;
+                var doo = form.elements['date_of_onset'].valueAsDate;
+                var doc = form.elements['date_of_confirmation'].valueAsDate;
+
+                if (dob > doo || dob > doc) messages.push("Date of onset/confirmation cannot be ealier than date of birth!");
+
+                if (doo.addDays(-3)>doc) messages.push("Case is isolated before being infectious. (3 days before the date of onset)");
+                
+                return messages;
+            });
+        }
+    </script>
+</body>
+</html>

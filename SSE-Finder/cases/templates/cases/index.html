@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SSEFinder Dashboard</title>
+  <link rel="stylesheet" href="{% static 'form.css' %}">
+</head>
+
+<body>
+  {% include "cases/nav_menu.html" %}
+  {% include "cases/popup.html" %}
+  
+  <div class="wrapper">
+    <div class="title">
+      <p style="font-weight: bold;">SSEFinder Dashboard</p>
+    </div>
+
+    <div class="title">
+      <p>Case Details & Add Events</p>
+    </div>
+    <form id="case-form" action="/case" method="POST"> {% csrf_token %}
+      <div class="form">
+        <div class="inputfield">
+          <label for="case_number"><span>Case Number:</span></label>
+          <input type="number" class="input" id="case_number" name="case_number" required>
+          <div class="inputfield">
+            <input class="btn" type="button" onclick="my_submit('case-form')" value="Submit" />
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="form" style="border: none;">
+      <div class="inputfield">
+        <a href="/case/add"><button class="btn">Add Case Record</button></a>
+      </div>
+    </div>
+
+    <div class="title">
+      <p>SSE Finder</p>
+    </div>
+    <form id="sse-form" action="/ssefinder" method="POST"> {% csrf_token %}
+      <div class="form">
+        <div class="inputfield">
+          <label for="start_date"><span>From:</span></label>
+          <input type="date" class="input" id="start_date" name="start_date" required>
+        </div>
+        <div class="inputfield">
+          <label for="end_date"><span>To:</span></label>
+          <input type="date" class="input" id="end_date" name="end_date" required>
+        </div>
+        <div class="inputfield">
+          <div id="form-message" style="color:red;"></div>
+        </div>
+        <div class="inputfield">
+          <input class="btn" type="button" onclick="my_submit_sse()" value="Submit" />
+        </div>
+      </div>
+    </form>
+
+  </div>
+</body>
+
+<script>
+  function my_submit(form_id){
+    _submit(undefined,$_(form_id));
+  }
+
+  function my_submit_sse(){
+    _submit(function (form){
+      var messages = [];
+
+      var sd = form.elements['start_date'].valueAsDate;
+      var ed = form.elements['end_date'].valueAsDate;
+
+      if (sd>ed) messages.push("Start date cannot be later than end date!");
+      return messages;
+    }, $_('sse-form'));
+  }
+  
+</script>
+
+</html>

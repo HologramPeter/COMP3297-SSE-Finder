@@ -1,0 +1,107 @@
+<script src='https://code.jquery.com/jquery-3.5.1.js'></script>
+<div id = "popup-container">
+    <div id="popup">
+        <div id="popup-content"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function $_(_){
+        return document.getElementById(_);
+    }
+
+    function popup(){
+        $_("popup-container").style.display = "flex";
+    }
+
+    function close_popup() {
+        $_("popup-container").style.display = "none";
+    }
+
+    function _submit(validate_function=function(form){return [];}, form=null){
+        if (form===null) form = $_('form');
+
+        var validate = true;
+
+        for(var i=0; i < form.elements.length; i++){
+            if(form.elements[i].value === '' && form.elements[i].hasAttribute('required')){
+                form.elements[i].style.backgroundColor = "lightgoldenrodyellow";
+                validate = false;
+            }else{
+                form.elements[i].style.backgroundColor = "";
+            }
+        }
+        var warning = validate? "":"Please fill in all the required fields!";
+
+        for(var message of validate_function(form)){
+            warning += "<br>"+message;
+        }
+
+        if (warning.length > 0){
+            $_('form-message').style.display = "block";
+            $_('form-message').innerHTML = warning;
+            return;
+        }else{
+            $_('form-message').style.display = "none";
+            $_('form-message').innerText = "";
+        }
+
+
+        var http = new XMLHttpRequest();
+        var url = form.getAttribute("action")||"";
+        var data = new FormData(form);
+        http.open('POST', url, true);
+        
+        http.onreadystatechange = function() {//Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 202) {
+                $_("popup-content").innerHTML = http.responseText;
+                popup();
+            }else if(http.readyState == 4 && http.status == 200){
+                window.location = http.responseURL;
+            }
+        }
+        http.send(data);
+    }
+
+    $(document).ready(function() {
+        $(window).keydown(function(event){
+            if(event.keyCode == 13) {
+            event.preventDefault();
+            return false;
+            }
+        });
+    });
+
+</script>
+
+
+<style>
+    #popup-container {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    #popup {
+        margin: auto;
+        height: 300px;
+        width: 500px;
+        
+        top:20%;
+
+        padding: 20px;
+        background-color: white;
+
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+</style>

@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Details</title>
+    <script src='https://code.jquery.com/jquery-3.5.1.js'></script>
+		<script type='text/javascript' src='https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js'></script>
+		<!-- <script type='text/javascript' src='https://cdn.datatables.net/fixedheader/3.1.8/js/dataTables.fixedHeader.min.js'></script> -->
+		<script src='{% static 'script.js' %}'></script>
+
+		<link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/v/dt/dt-1.10.24/datatables.min.css'/>
+		<!-- <link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/fixedheader/3.1.8/css/fixedHeader.dataTables.min.css'/> -->
+    <link rel="stylesheet" href="{% static 'form.css' %}">
+</head>
+<body>
+  {% include "cases/nav_menu.html" %}
+    <div class="wrapper">
+        <div class="title"><p>Case Details</p></div>
+        <table class="table">
+          <tr>
+            <td>Case number</td>
+            <td>{{ case_number }}</td>
+          </tr>
+        {% for inf in infector %}
+            <tr>
+              <td>Person Name</td>
+              <td>{{ inf.person_name }}</td>
+            </tr>
+            <tr>
+              <td>Document Number</td>
+              <td>{{ inf.document_number }}</td>
+            </tr>
+            <tr>
+              <td>Date of Birth</td>
+              <td>{{ inf.date_of_birth }}</td>
+            </tr>
+            <tr>
+              <td>Date of Onset</td>
+              <td>{{ inf.date_of_onset }}</td>
+            </tr>
+            <tr>
+              <td>Date of Confirmation</td>
+              <td>{{ inf.date_of_confirmation }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+
+        {% if attendances %}
+        <br><br>
+          <table class="datatable">
+            <thead>
+              <th>Infector Name</th>
+              <th>Event Attended</th>
+              <th>Date of Event</th>
+              <th>Description</th>
+              <th>Role</th>
+            </thead>
+            {% for atd in attendances %}
+              <tr>
+                <td>{{ atd.infector }}</td>
+                <td>{{ atd.event_attended }}</td>
+                <td>{{ atd.event_attended.date_of_event }}</td>
+                <td>{{ atd.description }}</td>
+                <td>
+                  {% if atd.is_infector  %}
+                    infector
+                  {% elif atd.is_infected %}
+                    infected
+                  {% else %}
+
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </table>
+        {% endif %}
+        <div class="form" style="border: none;">
+          <div class="inputfield">
+            <a href="{{ case_number }}/add_event"><button class="btn">Add Event Attendance Record</button></a>
+          </div>
+        </div>
+
+        <button class="back" onclick="javascript:history.back();">Back</button>
+    </div>
+</body>
+</html>

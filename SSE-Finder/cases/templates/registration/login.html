@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+		<link rel="stylesheet" href="{% static 'form.css' %}">
+</head>
+<body>
+  <div id="popup-container">
+      <div class="wrapper">
+      {% block content %}
+
+      {% if form.errors %}
+      <div class="title">Your username and password didn't match. Please try again.</p></div>
+      {% endif %}
+
+      {% if next %}
+        {% if user.is_authenticated %}
+        <div class="title"><p>Your account doesn't have access to this page. To proceed,
+          please login with an account that has access.</p></div>
+        {% else %}
+        <div class="title"><p>Please login to see this page.</p></div>
+        {% endif %}
+      {% endif %}
+
+      <form method="post" action="{% url 'login' %}" class="form">
+      {% csrf_token %}
+
+      <div class="inputfield">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+      </div>
+      <div class="inputfield">
+        {{ form.password.label_tag }}
+        {{ form.password }}
+      </div>
+
+      <div class="inputfield">
+        <input type="submit" value="login" class="btn" />
+        <input type="hidden" name="next" value="{{ next }}" />
+      </div>
+      </form>
+
+      {% endblock %}
+    </div>
+  </div>
+</body>
+
+
+<style>
+  #popup-container {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+  }
+</style>
