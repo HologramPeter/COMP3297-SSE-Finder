@@ -79,20 +79,20 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': env.dj_db_url('DATABASE_URL')
-# }
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ssefinder2',
-        'USER': 'test_user',
-        'PASSWORD': '123456',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
+    'default': env.dj_db_url('DATABASE_URL')
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'ssefinder2',
+#         'USER': 'test_user',
+#         'PASSWORD': '123456',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
 
 # DATABASES = {
 #     'default': {
