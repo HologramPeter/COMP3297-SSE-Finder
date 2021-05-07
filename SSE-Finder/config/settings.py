@@ -24,8 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('CHP_SECRET_KEY')
-# SECRET_KEY = 'django-insecure-vwcb7b7^13(w3uenspnj3+11cyl0@ldae+9pr94fa*p588it02'
+# SECRET_KEY = env('CHP_SECRET_KEY')
+SECRET_KEY = 'django-insecure-vwcb7b7^13(w3uenspnj3+11cyl0@ldae+9pr94fa*p588it02'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('CHP_DEBUG', default=False)
@@ -35,13 +35,13 @@ ALLOWED_HOSTS = ['sse-finder-comp3297-o.herokuapp.com', 'localhost', '127.0.0.1'
 # Application definition
 
 INSTALLED_APPS = [
+    "cases.apps.CasesConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "cases.apps.CasesConfig",
 ]
 
 MIDDLEWARE = [
@@ -79,20 +79,20 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': env.dj_db_url('DATABASE_URL')
-}
-
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'ssefinder2',
-#         'USER': 'test_user',
-#         'PASSWORD': '123456',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#     }
+#     'default': env.dj_db_url('DATABASE_URL')
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ssefinder2',
+        'USER': 'test_user',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
 
 # DATABASES = {
 #     'default': {

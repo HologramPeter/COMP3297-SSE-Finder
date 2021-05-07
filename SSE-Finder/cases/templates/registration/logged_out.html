@@ -1,4 +1,36 @@
-{% block content %}
-  <p>Logged out!</p>
-  <a href="{% url 'login'%}">Click here to login again.</a>
-{% endblock %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout</title>
+		<link rel="stylesheet" href="{% static 'form.css' %}">
+</head>
+<body>
+  <div id="popup-container">
+      <div class="wrapper">
+      {% block content %}
+      <div class="title"><p>Logged out</p></div>
+      <div class="back" onclick="window.location = '{% url 'login'%}'">Click here to login again.</div>
+      {% endblock %}
+    </div>
+  </div>
+</body>
+
+
+<style>
+  #popup-container {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+  }
+</style>
