@@ -22,7 +22,7 @@
     <div class="title">
       <p>Case Details & Add Events</p>
     </div>
-    <form id="case-form" action="/case" method="POST"> {% csrf_token %}
+    <form id="case-form" action="/case" method="POST" autocomplete="off"> {% csrf_token %}
       <div class="form">
         <div class="inputfield">
           <label for="case_number"><span>Case Number:</span></label>
@@ -43,7 +43,7 @@
     <div class="title">
       <p>SSE Finder</p>
     </div>
-    <form id="sse-form" action="/ssefinder" method="POST"> {% csrf_token %}
+    <form id="sse-form" action="/ssefinder" method="POST" autocomplete="off"> {% csrf_token %}
       <div class="form">
         <div class="inputfield">
           <label for="start_date"><span>From:</span></label>
